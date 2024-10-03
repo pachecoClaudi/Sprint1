@@ -1,9 +1,9 @@
-Quick setup — if you’ve done this kind of thing before
+--Quick setup — if you’ve done this kind of thing before
 or	
 https://github.com/pachecoClaudi/Sprint1.git
 Get started by creating a new file or uploading an existing file. We recommend every repository include a README, LICENSE, and .gitignore.
 
-…or create a new repository on the command line
+--or create a new repository on the command line
 echo "# Sprint1" >> README.md
 git init
 git add README.md
