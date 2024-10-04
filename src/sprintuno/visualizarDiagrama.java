@@ -17,8 +17,8 @@ import java.util.Base64;
  */
 public class visualizarDiagrama extends JFrame{
     private JTextArea umlTextArea;
-
     public visualizarDiagrama(String umlContent) {
+
         setTitle("Visor de Diagramas UML");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
