@@ -7,6 +7,9 @@ package sprintuno;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -23,6 +26,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author PACHECO
  */
 public class Ventana extends javax.swing.JFrame {
+private File archivo;
 
     /**
      * Creates new form Ventana
@@ -31,7 +35,10 @@ public class Ventana extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(this);
     }
-
+        public void cancelar(){
+        jLabel1.setText("");
+        archivo = null;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -106,9 +113,9 @@ public class Ventana extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(78, 78, 78)
+                .addGap(66, 66, 66)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton4)
                     .addComponent(jButton2)
@@ -148,6 +155,28 @@ public class Ventana extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+            if(archivo != null){
+            FileInputStream fis = null;
+                try {
+                    fis = new FileInputStream(archivo);
+                    byte[] contenido = new byte[(int) archivo.length()];
+                    fis.read(contenido);
+                    guardarArchivoEnBD(archivo.getName(), contenido);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
+                } finally {
+                    try {
+                        fis.close();
+                    } catch (IOException ex) {
+                        Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+        }else{
+            System.out.println("No se selecciono ningun diagrama");
+
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -158,12 +187,10 @@ public class Ventana extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         JFileChooser chosser = new JFileChooser();
          int res = chosser.showOpenDialog(this) ;
-        File archivo =  chosser.getSelectedFile() ; 
+        archivo =  chosser.getSelectedFile() ; 
         if (res == chosser.APPROVE_OPTION ){
             System.out.println("xd");
             jLabel1.setText(archivo.getPath()+archivo.getName());
-           
-        
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -171,9 +198,7 @@ public class Ventana extends javax.swing.JFrame {
        jButton5.setBackground(new Color(51,153,255));
     }//GEN-LAST:event_jButton5MouseEntered
 
-    private void cancelar(){
-        
-    }
+
     /**
      * @param args the command line arguments
      */
@@ -219,6 +244,7 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
     }
+    
 
     private void guardarArchivoEnBD(String nombreArchivo, byte[] contenido) {
         Connection cn = Conexion.getConnection(); // Llama a tu clase Conexion para obtener la conexión
@@ -241,6 +267,7 @@ public class Ventana extends javax.swing.JFrame {
             }
         }
     }
+
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
