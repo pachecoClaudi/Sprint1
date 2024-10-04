@@ -285,18 +285,8 @@ private File archivo;
     }
     
     public String getUMLContentFromDatabase(int archivoId, Connection connection) throws SQLException {
-        String query = "SELECT contenido FROM archivo WHERE id_archivo = ?";
-        PreparedStatement statement = connection.prepareStatement(query);
-        statement.setInt(1, archivoId);
-        ResultSet resultSet = statement.executeQuery();
-
-        if (resultSet.next()) {
-            // Convertir el contenido bytea a texto
             byte[] contenidoBytes = convertir(archivo);
             return new String(contenidoBytes);  // Convertidor de bytes a string
-        } else {
-            throw new SQLException("No se encontró el archivo con el ID especificado.");
-        }
     }
     
     public void subir () throws SQLException{
