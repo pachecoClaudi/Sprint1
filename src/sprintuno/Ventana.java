@@ -60,6 +60,7 @@ private File archivo;
         jButton5 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,6 +108,13 @@ private File archivo;
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
+        jButton1.setText("Editar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -128,7 +136,10 @@ private File archivo;
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(50, 50, 50)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton4)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton4)
+                                .addGap(67, 67, 67)
+                                .addComponent(jButton1))
                             .addComponent(jButton3))))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
@@ -149,8 +160,13 @@ private File archivo;
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton5))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton1)
+                                .addGap(14, 14, 14)))
                         .addComponent(jButton3)))
                 .addGap(31, 31, 31))
         );
@@ -213,6 +229,37 @@ private File archivo;
     private void jButton5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseEntered
        jButton5.setBackground(new Color(51,153,255));
     }//GEN-LAST:event_jButton5MouseEntered
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+         String[] opciones = {
+        "Editor 1 - https://www.editor1.com",//podemos poner el sitio que queramos aqui
+        "Editor 2 - https://www.editor2.com",
+        "Editor 3 - https://www.editor3.com"
+    };
+
+    // Mostrar el diálogo de selección
+    String seleccion = (String) JOptionPane.showInputDialog(
+            this,
+            "Selecciona un sitio web para editar tu diagrama UML:",
+            "Elegir Editor UML",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            opciones,
+            opciones[0] // Valor por defecto
+    );
+
+    // Abrir el sitio web seleccionado en el navegador
+    if (seleccion != null) {
+        try {
+            // Extraer la URL del texto seleccionado
+            String url = seleccion.split(" - ")[1];
+            java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al abrir el sitio web: " + e.getMessage());
+        }
+    }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     /**
@@ -304,6 +351,7 @@ private File archivo;
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
