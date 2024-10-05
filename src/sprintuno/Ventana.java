@@ -244,7 +244,7 @@ private File archivo;
          int res = chosser.showOpenDialog(this) ;
         archivo =  chosser.getSelectedFile() ; 
         if (res == chosser.APPROVE_OPTION ){
-            System.out.println("xd");
+            jLabel1.setIcon(chosser.getIcon(archivo));
             jLabel1.setText(archivo.getPath()+archivo.getName()); 
             try {
                 subir();
