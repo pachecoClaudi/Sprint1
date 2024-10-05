@@ -233,9 +233,9 @@ private File archivo;
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
          String[] opciones = {
-        "Editor 1 - https://www.editor1.com",//podemos poner el sitio que queramos aqui
-        "Editor 2 - https://www.editor2.com",
-        "Editor 3 - https://www.editor3.com"
+        "lucidchart - https://www.lucidchart.com/pages/es/ejemplos/diagrama-uml", // Editor en línea para UML
+        "creately - https://creately.com/es/lp/herramienta-de-diagrama-uml/", // Herramienta de diagramación en línea
+        "gitmind - https://gitmind.com/es/herramienta-gratis-diagrama-uml.html" // Herramienta de diagramación gratuita
     };
 
     // Mostrar el diálogo de selección
