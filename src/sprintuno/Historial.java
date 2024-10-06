@@ -227,6 +227,7 @@ public class Historial extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        jTextArea1.setEditable(true);
         Generar(); 
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -241,7 +242,6 @@ public class Historial extends javax.swing.JPanel {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        jTextArea1.setEditable(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
 

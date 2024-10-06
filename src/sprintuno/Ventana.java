@@ -29,11 +29,6 @@ private File archivo;
         inicio(); 
     }
     
-    
-   
-   
-    
-   
     public void cambiaPanel(JPanel panel){
     
         panel.setSize(content.getWidth(),content.getHeight());
@@ -81,6 +76,11 @@ private File archivo;
         });
 
         jButton7.setText("Generador");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         jButton8.setText("Historial");
         jButton8.addActionListener(new java.awt.event.ActionListener() {
@@ -149,6 +149,12 @@ public void inicio  (){
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         inicio();
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        Generador nuevo = new Generador();
+        cambiaPanel(nuevo);
+    }//GEN-LAST:event_jButton7ActionPerformed
 
 
     /**
