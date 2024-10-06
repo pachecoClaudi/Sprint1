@@ -2,9 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package sprintuno;
+package Principal;
 
-import java.sql.Connection;
+import Codigo.MostrarCodigo;
+import sprintuno.Ventana;
+
 
 /**
  *
@@ -46,6 +48,11 @@ public class Ventana_principal extends javax.swing.JFrame {
         });
 
         btnVercodigo.setText(" Codigo ");
+        btnVercodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVercodigoActionPerformed(evt);
+            }
+        });
 
         btnManual.setText("Manual");
 
@@ -94,6 +101,11 @@ public class Ventana_principal extends javax.swing.JFrame {
     // Hacer visible la ventana
     ventana.setVisible(true);
     }//GEN-LAST:event_btnConvertitActionPerformed
+
+    private void btnVercodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVercodigoActionPerformed
+       MostrarCodigo mostrar=new MostrarCodigo();
+        mostrar.setVisible(true);
+    }//GEN-LAST:event_btnVercodigoActionPerformed
 
     /**
      * @param args the command line arguments
