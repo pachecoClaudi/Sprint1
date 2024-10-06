@@ -5,25 +5,14 @@
 package sprintuno;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.Image;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.Icon;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import static sprintuno.visualizarDiagrama.getUMLContentFromDatabase;
 
 /**
  *
@@ -34,75 +23,25 @@ private File archivo;
 
     public Ventana() {
         initComponents();
-        this.setLocationRelativeTo(this);
-    }
-    
-    private boolean esArchivoValido(File archivo) {
-    String nombreArchivo = archivo.getName();
-    return nombreArchivo.length() >= 4 && nombreArchivo.substring(nombreArchivo.length() - 4).equalsIgnoreCase(".mdj");
-    }
-
-    
-    private byte[] convertir(File archivo){
-        byte[] res = null;
-        if(archivo != null){
-            FileInputStream fis = null;
-                try {
-                    fis = new FileInputStream(archivo);
-                    res = new byte[(int) archivo.length()];
-                    fis.read(res);
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
-                } finally {
-                    try {
-                        fis.close();
-                    } catch (IOException ex) {
-                        Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-        }
-        return res;
-    }
-    
-    public void cancelar(){
-        jLabel1.setText("");
-        archivo = null;
-        jTextArea1.setText("");
-    }
-    
-    private void guardarArchivoEnBD(String nombreArchivo, byte[] contenido) {
-        Connection cn = Conexion.getConnection(); // Llama a tu clase Conexion para obtener la conexión
         
-        String sql = "INSERT INTO archivo (nombre_archivo, contenido) VALUES (?, ?)";
-
-        try (PreparedStatement pstmt = cn.prepareStatement(sql)) {
-            pstmt.setString(1, nombreArchivo);
-            pstmt.setBytes(2, contenido);
-            pstmt.executeUpdate();
-
-            JOptionPane.showMessageDialog(this, "Archivo guardado exitosamente.");
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al guardar el archivo: " + e.getMessage());
-        } finally {
-            try {
-                if (cn != null) cn.close(); // Cierra la conexión después de usarla
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, "Error al cerrar la conexión: " + e.getMessage());
-            }
-        }
+        this.setLocationRelativeTo(this);
+        setIconImage(new ImageIcon(getClass().getResource("/Imagenes/logo.png")).getImage());
+        inicio(); 
     }
     
-    public String visualizarDiagrama() throws SQLException{
-        byte[] contenidoBytes = convertir(archivo);
-        return new String(contenidoBytes);  // Convertidor de bytes a string
-    }
     
-    public void subir () throws SQLException{
-        String umlContent = visualizarDiagrama();
-        jTextArea1.setEditable(false);
-        jTextArea1.setText(umlContent);  // Insertar el contenido UML pasado como parámetro
+   
+   
+    
+   
+    public void cambiaPanel(JPanel panel){
+    
+        panel.setSize(content.getWidth(),content.getHeight());
+        panel.setLocation(0, 0);
+        content.removeAll();
+        content.add(panel,BorderLayout.CENTER) ; 
+        content.revalidate();
+        content.repaint();
     }
         
         
@@ -111,15 +50,12 @@ private File archivo;
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        btnValidar = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
+        content = new javax.swing.JPanel();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -133,209 +69,86 @@ private File archivo;
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton3.setText("Cancelar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jPanel2.setBackground(new java.awt.Color(62, 109, 109));
+
+        jButton6.setText("Inicio");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jButton6ActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Guardar");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        jButton7.setText("Generador");
+
+        jButton8.setText("Historial");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                jButton8ActionPerformed(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel1.setText("Vista previa del UML");
+        jButton9.setText("Ayuda");
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sprintuno/imagenes/cargando.png"))); // NOI18N
-        jButton5.setText("Subir");
-        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jButton5MouseEntered(evt);
-            }
-        });
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
-
-        jButton1.setText("Editar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("Enviar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        btnValidar.setText("Validar");
-        btnValidar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnValidarActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 755, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnValidar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(34, Short.MAX_VALUE))
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(67, Short.MAX_VALUE)
-                        .addComponent(jButton5)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnValidar)
-                        .addGap(58, 58, 58)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(74, 74, 74))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(60, 60, 60))))
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(110, 110, 110)
+                .addComponent(jButton6)
+                .addGap(18, 18, 18)
+                .addComponent(jButton7)
+                .addGap(18, 18, 18)
+                .addComponent(jButton8)
+                .addGap(18, 18, 18)
+                .addComponent(jButton9)
+                .addContainerGap(214, Short.MAX_VALUE))
         );
+
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 150, 490));
+
+        javax.swing.GroupLayout contentLayout = new javax.swing.GroupLayout(content);
+        content.setLayout(contentLayout);
+        contentLayout.setHorizontalGroup(
+            contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 850, Short.MAX_VALUE)
+        );
+        contentLayout.setVerticalGroup(
+            contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 500, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(content, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, -10, 850, 500));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+public void inicio  (){
+ Guardar nuevo  = new Guardar ();      
+        cambiaPanel(nuevo);
+}
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        if (archivo != null && esArchivoValido(archivo)) {
-        byte[] contenido = convertir(archivo);  // Supongo que ya tienes este método
-        guardarArchivoEnBD(archivo.getName(), contenido);
-        JOptionPane.showMessageDialog(this, "Archivo guardado correctamente en la base de datos.");
-    } else {
-        JOptionPane.showMessageDialog(this, "Seleccione un archivo válido antes de guardar.");
-    }
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
 
+        Historial nuevo = new Historial(); 
+        cambiaPanel(nuevo);
+    }//GEN-LAST:event_jButton8ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-        cancelar();
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-JFileChooser chooser = new JFileChooser();
-    int res = chooser.showOpenDialog(this);
-    
-    if (res == JFileChooser.APPROVE_OPTION) {
-        archivo = chooser.getSelectedFile();  // Asignamos el archivo seleccionado
-        
-        if (archivo != null) {
-            // Mostramos el icono y la ruta del archivo seleccionado
-            jLabel1.setIcon(chooser.getIcon(archivo));
-            jLabel1.setText(archivo.getPath() + " " + archivo.getName());
-        } else {
-            JOptionPane.showMessageDialog(this, "No se seleccionó ningún archivo.");
-        }
-    }
-    }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseEntered
-       jButton5.setBackground(new Color(51,153,255));
-    }//GEN-LAST:event_jButton5MouseEntered
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        if(archivo != null){
-            cancelar();
-         String[] opciones = {
-        "lucidchart - https://www.lucidchart.com/pages/es/ejemplos/diagrama-uml", // Editor en línea para UML
-        "creately - https://creately.com/es/lp/herramienta-de-diagrama-uml/", // Herramienta de diagramación en línea
-        "gitmind - https://gitmind.com/es/herramienta-gratis-diagrama-uml.html" // Herramienta de diagramación gratuita
-    };
-
-    // Mostrar el diálogo de selección
-    String seleccion = (String) JOptionPane.showInputDialog(
-            this,
-            "Selecciona un sitio web para editar tu diagrama UML:",
-            "Elegir Editor UML",
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            opciones,
-            opciones[0] // Valor por defecto
-    );
-
-    // Abrir el sitio web seleccionado en el navegador
-    if (seleccion != null) {
-        try {
-            // Extraer la URL del texto seleccionado
-            String url = seleccion.split(" - ")[1];
-            java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al abrir el sitio web: " + e.getMessage());
-        }
-    }
-        }else{
-                JOptionPane.showMessageDialog(this, "Seleccione un archivo");
-
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void btnValidarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValidarActionPerformed
-    if (archivo == null) {
-        // Si no se ha seleccionado ningún archivo, mostramos un mensaje de error
-        JOptionPane.showMessageDialog(this, "Seleccione un archivo antes de validar.");
-    } else if (esArchivoValido(archivo)) {
-        // Si el archivo es válido, permite la subida
-        try {
-            subir();
-            JOptionPane.showMessageDialog(this, "Archivo válido y cargado correctamente.");
-        } catch (SQLException ex) {
-            Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Error al subir el archivo.");
-        }
-    } else {
-        // Si el archivo no es válido, muestra un mensaje de error
-        JOptionPane.showMessageDialog(this, "El archivo no es válido. Asegúrese de que sea un archivo .mdj");
-    }
-    }//GEN-LAST:event_btnValidarActionPerformed
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        inicio();
+    }//GEN-LAST:event_jButton6ActionPerformed
 
 
     /**
@@ -356,20 +169,18 @@ JFileChooser chooser = new JFileChooser();
                     Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 new Ventana().setVisible(true);
+                
             }
         });
     }
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnValidar;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel content;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 }
