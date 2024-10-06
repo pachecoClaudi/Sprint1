@@ -37,6 +37,12 @@ private File archivo;
         this.setLocationRelativeTo(this);
     }
     
+    private boolean esArchivoValido(File archivo) {
+    String nombreArchivo = archivo.getName();
+    return nombreArchivo.length() >= 4 && nombreArchivo.substring(nombreArchivo.length() - 4).equalsIgnoreCase(".mdj");
+    }
+
+    
     private byte[] convertir(File archivo){
         byte[] res = null;
         if(archivo != null){
@@ -113,6 +119,7 @@ private File archivo;
         jTextArea1 = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        btnValidar = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -175,6 +182,13 @@ private File archivo;
             }
         });
 
+        btnValidar.setText("Validar");
+        btnValidar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnValidarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -190,7 +204,8 @@ private File archivo;
                     .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
                     .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnValidar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(34, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -210,7 +225,9 @@ private File archivo;
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(93, 93, 93)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnValidar)
+                        .addGap(58, 58, 58)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -224,13 +241,13 @@ private File archivo;
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-        if(archivo != null){
-           byte [] contenido = convertir(archivo);
-           guardarArchivoEnBD(archivo.getName(), contenido);
-        }else{
-            JOptionPane.showMessageDialog(this, "Seleccione un archivo");
-        }
+        if (archivo != null && esArchivoValido(archivo)) {
+        byte[] contenido = convertir(archivo);  // Supongo que ya tienes este método
+        guardarArchivoEnBD(archivo.getName(), contenido);
+        JOptionPane.showMessageDialog(this, "Archivo guardado correctamente en la base de datos.");
+    } else {
+        JOptionPane.showMessageDialog(this, "Seleccione un archivo válido antes de guardar.");
+    }
     }//GEN-LAST:event_jButton4ActionPerformed
 
 
@@ -240,18 +257,20 @@ private File archivo;
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        JFileChooser chosser = new JFileChooser();
-         int res = chosser.showOpenDialog(this) ;
-        archivo =  chosser.getSelectedFile() ; 
-        if (res == chosser.APPROVE_OPTION ){
-            jLabel1.setIcon(chosser.getIcon(archivo));
-            jLabel1.setText(archivo.getPath()+archivo.getName()); 
-            try {
-                subir();
-            } catch (SQLException ex) {
-                Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
-            }
+JFileChooser chooser = new JFileChooser();
+    int res = chooser.showOpenDialog(this);
+    
+    if (res == JFileChooser.APPROVE_OPTION) {
+        archivo = chooser.getSelectedFile();  // Asignamos el archivo seleccionado
+        
+        if (archivo != null) {
+            // Mostramos el icono y la ruta del archivo seleccionado
+            jLabel1.setIcon(chooser.getIcon(archivo));
+            jLabel1.setText(archivo.getPath() + " " + archivo.getName());
+        } else {
+            JOptionPane.showMessageDialog(this, "No se seleccionó ningún archivo.");
         }
+    }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseEntered
@@ -299,6 +318,25 @@ private File archivo;
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void btnValidarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValidarActionPerformed
+    if (archivo == null) {
+        // Si no se ha seleccionado ningún archivo, mostramos un mensaje de error
+        JOptionPane.showMessageDialog(this, "Seleccione un archivo antes de validar.");
+    } else if (esArchivoValido(archivo)) {
+        // Si el archivo es válido, permite la subida
+        try {
+            subir();
+            JOptionPane.showMessageDialog(this, "Archivo válido y cargado correctamente.");
+        } catch (SQLException ex) {
+            Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al subir el archivo.");
+        }
+    } else {
+        // Si el archivo no es válido, muestra un mensaje de error
+        JOptionPane.showMessageDialog(this, "El archivo no es válido. Asegúrese de que sea un archivo .mdj");
+    }
+    }//GEN-LAST:event_btnValidarActionPerformed
+
 
     /**
      * @param args the command line arguments
@@ -323,6 +361,7 @@ private File archivo;
     }
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnValidar;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
