@@ -153,6 +153,11 @@ public class Historial extends javax.swing.JPanel {
         });
 
         jButton3.setText("Guardar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jComboBox1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar", "JavaScript", "Python", "Java", "C#", "Ruby", "Swift", "PHP" }));
@@ -243,6 +248,43 @@ public class Historial extends javax.swing.JPanel {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+         if (id != 0 && !jComboBox1.getSelectedItem().toString().equals("Seleccionar")) {
+            try {
+            
+                Connection cn = Conexion.getConnection();
+            
+                String updateQuery = "UPDATE codigogenerado SET codigo = ? WHERE id_archivo = ? AND lenguaje = ?";
+                PreparedStatement ps = cn.prepareStatement(updateQuery);
+            
+                String nuevoContenido = jTextArea1.getText();
+            
+                // Configura los parámetros de la consulta
+                ps.setString(1, nuevoContenido);  
+                ps.setInt(2, id);                 
+                ps.setString(3, jComboBox1.getSelectedItem().toString()); // Lenguaje seleccionado
+            
+                // Ejecuta la consulta actualizada
+                int rowsUpdated = ps.executeUpdate();
+            
+                    if (rowsUpdated > 0) {
+                
+                        JOptionPane.showMessageDialog(this, "El archivo se ha guardado exitosamente.");
+                    } else {
+                        // Si no se actualizó nada
+                        JOptionPane.showMessageDialog(this, "No se pudo guardar.");
+                    }
+                } catch (SQLException e) {
+
+                    System.out.println(e.getMessage());
+                    JOptionPane.showMessageDialog(this, "Error al actualizar el archivo: " + e.getMessage());
+                }
+            } else {
+             
+                JOptionPane.showMessageDialog(this, "Por favor, selecciona un archivo y un lenguaje antes de guardar.");
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
