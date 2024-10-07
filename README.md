@@ -18,4 +18,4 @@ git push -u origin main
 
 
 
-Por favor peden decir la libreria que usaron ya que al moneto de ejecutar me pide una libreria, ponganlo sino en el repositorio por favor
+Por favor peden decir la libreria que usaron ya que al moneto de ejecutar me pide una libreria, ponganlo sino en el repositorio por favor, creen una creare una carpeta para libreria ahi lo ponen o lo pasan al watsap
