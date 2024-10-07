@@ -3,8 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package sprintuno;
+import java.sql.SQLException ; 
+import java.sql.Connection ; 
+import java.sql.PreparedStatement ; 
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 
-/**
+/*
  *
  * @author Giuliana
  */
@@ -31,7 +36,7 @@ public class Generador extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jComboBox2 = new javax.swing.JComboBox<>();
         jButton2 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        txtBuscar = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
@@ -49,14 +54,12 @@ public class Generador extends javax.swing.JPanel {
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jButton2.setText("Seleccionar diagrama");
+        jButton2.setText("Buscar Diagrama");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
-
-        jTextField1.setText("jTextField1");
 
         jLabel1.setText("jLabel1");
 
@@ -77,7 +80,7 @@ public class Generador extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton1)
                             .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextField1)))
+                            .addComponent(txtBuscar)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addComponent(jLabel1))
@@ -91,7 +94,7 @@ public class Generador extends javax.swing.JPanel {
                                 .addGap(6, 6, 6)
                                 .addComponent(jButton4))
                             .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,7 +104,7 @@ public class Generador extends javax.swing.JPanel {
                         .addGap(40, 40, 40)
                         .addComponent(jButton2)
                         .addGap(8, 8, 8)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(17, 17, 17)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -124,7 +127,38 @@ public class Generador extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+
+    Connection cn = Conexion.getConnection(); // Llama a tu clase Conexion para obtener la conexión
+    String nombre = txtBuscar.getText(); // Obtiene el texto del campo de búsqueda
+    String sql = "SELECT buscar_archivo(?);"; // Consulta que llama a la función almacenada
+    
+    try {
+        PreparedStatement ps = cn.prepareStatement(sql);
+        ps.setString(1, nombre); 
+        ResultSet rs = ps.executeQuery();     
+        if (rs.next()) {
+            String resultado = rs.getString(1);  
+            if (resultado != null) {
+                JOptionPane.showMessageDialog(this, "Archivo encontrado.", "Archivo encontrado", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No hay ningún archivo con ese nombre en la base de datos.", "Archivo no encontrado", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No hay ningún archivo con ese nombre en la base de datos.", "Archivo no encontrado", JOptionPane.INFORMATION_MESSAGE);
+        } 
+        rs.close();
+        ps.close();
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al buscar el archivo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    } finally {
+        try {
+            if (cn != null && !cn.isClosed()) {
+                cn.close(); // Cierra la conexión a la base de datos
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
@@ -137,6 +171,6 @@ public class Generador extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }
