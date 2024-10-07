@@ -15,3 +15,7 @@ git push -u origin main
 git remote add origin https://github.com/pachecoClaudi/Sprint1.git
 git branch -M main
 git push -u origin main
+
+
+
+Por favor peden decir la libreria que usaron ya que al moneto de ejecutar me pide una libreria, ponganlo sino en el repositorio por favor
