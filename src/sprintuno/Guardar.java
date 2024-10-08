@@ -23,8 +23,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import static sprintuno.visualizarDiagrama.getUMLContentFromDatabase;
-
 /**
  *
  * @author MI EQUIPO

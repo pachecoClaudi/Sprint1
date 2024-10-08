@@ -13,7 +13,6 @@ import static sprintuno.Conexion.getConnection;
 import java.sql.ResultSet ; 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static sprintuno.visualizarDiagrama.getUMLContentFromDatabase;
 /**
  *
  * @author MI EQUIPO
@@ -156,9 +155,7 @@ public class Historial extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        jTextArea1.setBackground(new java.awt.Color(0, 0, 0));
         jTextArea1.setColumns(20);
-        jTextArea1.setForeground(new java.awt.Color(255, 255, 255));
         jTextArea1.setRows(5);
         jScrollPane2.setViewportView(jTextArea1);
 
@@ -200,9 +197,9 @@ public class Historial extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(86, 86, 86)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31)
-                        .addComponent(btnEliminar)
-                        .addGap(64, 64, 64)
+                        .addGap(33, 33, 33)
+                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
@@ -227,7 +224,7 @@ public class Historial extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEliminar))
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -332,7 +329,6 @@ public class Historial extends javax.swing.JPanel {
     } catch (Exception e) {
         JOptionPane.showMessageDialog(null, "Error al eliminar el registro: " + e.getMessage());
     }
-                      // TODO add your handling code here:
     }//GEN-LAST:event_btnEliminarActionPerformed
 
 
