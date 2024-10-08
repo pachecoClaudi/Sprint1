@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
  * @author Giuliana
  */
 public class Generador extends javax.swing.JPanel {
-
+    private int archivoId = -1;
     /**
      * Creates new form Generador
      */
@@ -33,7 +33,7 @@ public class Generador extends javax.swing.JPanel {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
+        btnGenerarCodigo = new javax.swing.JButton();
         jComboBox2 = new javax.swing.JComboBox<>();
         jButton2 = new javax.swing.JButton();
         txtBuscar = new javax.swing.JTextField();
@@ -45,10 +45,10 @@ public class Generador extends javax.swing.JPanel {
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        jButton1.setText("Generar codigo");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnGenerarCodigo.setText("Generar codigo");
+        btnGenerarCodigo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnGenerarCodigoActionPerformed(evt);
             }
         });
 
@@ -78,7 +78,7 @@ public class Generador extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1)
+                            .addComponent(btnGenerarCodigo)
                             .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtBuscar)))
                     .addGroup(layout.createSequentialGroup()
@@ -112,7 +112,7 @@ public class Generador extends javax.swing.JPanel {
                         .addGap(14, 14, 14)
                         .addComponent(jButton4)
                         .addGap(24, 24, 24)
-                        .addComponent(jButton1)
+                        .addComponent(btnGenerarCodigo)
                         .addGap(29, 29, 29)
                         .addComponent(jButton3))
                     .addGroup(layout.createSequentialGroup()
@@ -122,9 +122,40 @@ public class Generador extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnGenerarCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarCodigoActionPerformed
+        // TODO add your handling code here:                                              
+    Connection cn = Conexion.getConnection(); // Llama a tu clase Conexion para obtener la conexión
+    int archivoId = 1;//Integer.parseInt(txtArchivoId.getText()); // Obtiene el ID del archivo de un campo de texto
+    String lenguaje = "Python";//comboBoxLenguaje.getSelectedItem().toString(); // Obtiene el lenguaje seleccionado desde un combo box
+    String sql = "SELECT verificar_codigo_generado(?, ?);"; // Consulta para llamar a la función
+
+    try {
+        PreparedStatement ps = cn.prepareStatement(sql);
+        ps.setInt(1, archivoId); // Establece el id del archivo
+        ps.setString(2, lenguaje); // Establece el lenguaje elegido
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            String codigoGenerado = rs.getString(1); // Obtiene el código generado
+            jTextArea1.setText(codigoGenerado); // Muestra el código en el área de texto
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontró el código para el archivo y lenguaje proporcionado.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        rs.close();
+        ps.close();
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al generar el código: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    } finally {
+        try {
+            if (cn != null && !cn.isClosed()) {
+                cn.close(); // Cierra la conexión a la base de datos
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    }//GEN-LAST:event_btnGenerarCodigoActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
@@ -163,7 +194,7 @@ public class Generador extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnGenerarCodigo;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
