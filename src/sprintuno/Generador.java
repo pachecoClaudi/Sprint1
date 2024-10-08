@@ -64,6 +64,11 @@ public class Generador extends javax.swing.JPanel {
         jLabel1.setText("jLabel1");
 
         jButton3.setText("Guardar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Cancelar");
 
@@ -191,6 +196,84 @@ public class Generador extends javax.swing.JPanel {
         }
     }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        Connection cn = Conexion.getConnection(); 
+        String nombre = txtBuscar.getText(); 
+        String nombreArchivo = ""; 
+        String sqlBuscar = "SELECT nombre_archivo FROM archivo WHERE nombre_archivo = ?";
+
+        try {
+            PreparedStatement psBuscar = cn.prepareStatement(sqlBuscar);
+            psBuscar.setString(1, nombre); 
+            ResultSet rsBuscar = psBuscar.executeQuery();     
+            if (rsBuscar.next()) {
+                nombreArchivo = rsBuscar.getString(1); // Almacena el nombre del archivo encontrado
+            } else {
+                JOptionPane.showMessageDialog(this, "No hay ningún archivo con ese nombre en la base de datos.", "Archivo no encontrado", JOptionPane.INFORMATION_MESSAGE);
+                return; // Termina la ejecución si no se encuentra el archivo
+            } 
+            rsBuscar.close();
+            psBuscar.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Error al buscar el archivo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+    
+        String sqlInsert = "INSERT INTO codigogenerado (codigo, lenguaje, id_archivo) VALUES (?, ?, ?)";
+        String lenguaje = (String) jComboBox2.getSelectedItem();
+
+        try {
+            // Comprobar si ya existe un archivo con el mismo nombre
+            PreparedStatement checkStmt = cn.prepareStatement("SELECT COUNT(*) FROM codigogenerado WHERE codigo = ?");
+            checkStmt.setString(1, nombreArchivo);
+            ResultSet rs = checkStmt.executeQuery();
+            int count = 0;
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+
+            // Si ya existe, agrega un número al final del nombre
+            String nombreParaGuardar = nombreArchivo;
+                if (count > 0) {
+                int i = 1;
+                while (count > 0) {
+                    nombreParaGuardar = nombreArchivo + "(" + i + ")";
+                    checkStmt.setString(1, nombreParaGuardar);
+                    rs = checkStmt.executeQuery();
+                    if (rs.next()) {
+                        count = rs.getInt(1);
+                    }
+                    i++;
+                }
+            }
+
+            rs.close();
+            checkStmt.close();
+
+             // Inserción del nuevo registro
+            PreparedStatement ps = cn.prepareStatement(sqlInsert);
+            ps.setString(1, nombreParaGuardar); 
+            ps.setString(2, lenguaje); 
+            ps.setInt(3, 1); 
+            ps.executeUpdate();
+
+            JOptionPane.showMessageDialog(this, "Archivo guardado como: " + nombreParaGuardar, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            ps.close();
+
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Error al guardar el archivo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } finally {
+                try {
+                    if (cn != null && !cn.isClosed()) {
+                        cn.close(); // Cierra la conexión a la base de datos
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
